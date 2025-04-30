@@ -1,10 +1,39 @@
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Briefcase, Rocket, Award, Image, Globe, Star } from "lucide-react";
 
-const ServiceCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => {
+const ServiceCard = ({ 
+  icon: Icon, 
+  title, 
+  description, 
+  index 
+}: { 
+  icon: any, 
+  title: string, 
+  description: string, 
+  index: number 
+}) => {
+  const [scrollY, setScrollY] = useState(0);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  
   return (
-    <div className="material-card p-6 flex flex-col h-full hover:translate-y-[-4px] transition-transform">
+    <div 
+      className="material-card p-6 flex flex-col h-full hover:translate-y-[-4px] transition-all rounded-xl backdrop-blur-sm bg-white/90"
+      style={{ 
+        transform: `translateY(${Math.max(0, scrollY * 0.02 - (index * 20))}px)`,
+        transition: "transform 0.1s ease-out",
+        opacity: Math.min(1, (scrollY - 100 * index) / 400),
+      }}
+    >
       <div className="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center text-primary-500 mb-5">
         <Icon size={24} />
       </div>
@@ -57,7 +86,7 @@ const Services = () => {
       <div className="material-container">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h6 className="text-primary-500 font-medium mb-2">OUR SERVICES</h6>
-          <h2>What We Do Best</h2>
+          <h2 className="font-light tracking-tight">What We Do <span className="font-medium">Best</span></h2>
           <p className="text-gray-600 mt-4">
             We offer a comprehensive range of services designed to elevate your brand's social media presence and drive meaningful engagement.
           </p>
@@ -70,13 +99,14 @@ const Services = () => {
                 icon={service.icon}
                 title={service.title}
                 description={service.description}
+                index={index}
               />
             </div>
           ))}
         </div>
 
         <div className="mt-8 text-center">
-          <Button className="btn-material-contained">
+          <Button className="btn-material-contained rounded-full">
             View All Services
           </Button>
         </div>

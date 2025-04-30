@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -35,7 +35,7 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 231 48% 48%;
 
-    --radius: 4px;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -75,7 +75,7 @@
   }
 
   html {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     scroll-behavior: smooth;
   }
 
@@ -84,19 +84,19 @@
   }
 
   h1 {
-    @apply text-4xl font-medium md:text-5xl lg:text-6xl; /* Material Headline 1 */
+    @apply text-4xl font-light md:text-5xl lg:text-6xl tracking-tight; /* Material Headline 1 */
   }
 
   h2 {
-    @apply text-3xl font-medium md:text-4xl; /* Material Headline 2 */
+    @apply text-3xl font-light md:text-4xl tracking-tight; /* Material Headline 2 */
   }
 
   h3 {
-    @apply text-2xl font-medium md:text-3xl; /* Material Headline 3 */
+    @apply text-2xl font-light md:text-3xl tracking-tight; /* Material Headline 3 */
   }
 
   h4 {
-    @apply text-xl font-medium md:text-2xl; /* Material Headline 4 */
+    @apply text-xl font-light md:text-2xl tracking-tight; /* Material Headline 4 */
   }
 
   h5 {
@@ -111,24 +111,24 @@
 @layer components {
   /* Material Card Styles */
   .material-card {
-    @apply bg-white rounded shadow hover:shadow-md transition-shadow duration-300 overflow-hidden;
+    @apply bg-white rounded-xl shadow hover:shadow-md transition-shadow duration-300 overflow-hidden;
   }
 
   /* Material Button Styles */
   .btn-material-contained {
-    @apply bg-primary-500 text-white rounded px-6 py-2 font-medium
+    @apply bg-primary-500 text-white rounded-full px-6 py-2 font-medium
       transition-all duration-300 hover:bg-primary-600 active:bg-primary-700
       focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
   }
 
   .btn-material-outlined {
-    @apply border border-primary-500 text-primary-500 rounded px-6 py-2 font-medium
+    @apply border border-primary-500 text-primary-500 rounded-full px-6 py-2 font-medium
       transition-all duration-300 hover:bg-primary-50 active:bg-primary-100
       focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
   }
 
   .btn-material-text {
-    @apply text-primary-500 rounded px-4 py-2 font-medium
+    @apply text-primary-500 rounded-full px-4 py-2 font-medium
       transition-all duration-300 hover:bg-primary-50 active:bg-primary-100
       focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2;
   }
@@ -165,6 +165,11 @@
   .material-grid {
     @apply grid grid-cols-4 gap-4 md:grid-cols-8 lg:grid-cols-12;
   }
+
+  /* Glass Morphism */
+  .glass {
+    @apply bg-white/20 backdrop-blur-lg border border-white/10;
+  }
 }
 
 @layer utilities {
@@ -190,4 +195,16 @@
   .ripple-effect:active::after {
     @apply opacity-100 scale-100 transition-none;
   }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent;
+  }
+}
+
+/* Remove App.css styling since we're incorporating it here */
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }

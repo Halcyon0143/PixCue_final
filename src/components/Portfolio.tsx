@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -15,6 +15,16 @@ interface CaseStudy {
 
 const Portfolio = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const caseStudies: CaseStudy[] = [
     {
@@ -66,7 +76,7 @@ const Portfolio = () => {
       <div className="material-container">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h6 className="text-primary-500 font-medium mb-2">OUR PORTFOLIO</h6>
-          <h2>Case Studies</h2>
+          <h2 className="font-light tracking-tight">Case <span className="font-medium">Studies</span></h2>
           <p className="text-gray-600 mt-4">
             Explore how we've helped brands transform their social media presence and achieve exceptional results.
           </p>
@@ -78,7 +88,7 @@ const Portfolio = () => {
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full bg-white elevation-1 hover:elevation-2 text-gray-700 hover:text-primary-500 transition-all"
+              className="rounded-full bg-white/80 backdrop-blur-sm elevation-1 hover:elevation-2 text-gray-700 hover:text-primary-500 transition-all"
               onClick={prevSlide}
             >
               <ChevronLeft size={24} />
@@ -88,7 +98,7 @@ const Portfolio = () => {
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full bg-white elevation-1 hover:elevation-2 text-gray-700 hover:text-primary-500 transition-all"
+              className="rounded-full bg-white/80 backdrop-blur-sm elevation-1 hover:elevation-2 text-gray-700 hover:text-primary-500 transition-all"
               onClick={nextSlide}
             >
               <ChevronRight size={24} />
@@ -96,18 +106,28 @@ const Portfolio = () => {
           </div>
 
           {/* Case Study Card */}
-          <div className="material-card overflow-hidden">
+          <div 
+            className="material-card overflow-hidden rounded-xl backdrop-blur-sm"
+            style={{ 
+              transform: `translateY(${Math.max(0, (scrollY - 1400) * 0.05)}px)`,
+              transition: "transform 0.1s ease-out"
+            }}
+          >
             <div className="material-grid">
               <div className="col-span-4 md:col-span-5 lg:col-span-7">
-                <div className="h-full">
+                <div className="h-full overflow-hidden">
                   <img
                     src={currentCaseStudy.image}
                     alt={currentCaseStudy.title}
-                    className="w-full h-full object-cover min-h-[300px]"
+                    className="w-full h-full object-cover min-h-[300px] transition-transform hover:scale-105 duration-700"
+                    style={{ 
+                      transform: `scale(1.05) translateY(${Math.max(0, (scrollY - 1500) * -0.03)}px)`,
+                      transition: "transform 0.3s ease-out"
+                    }}
                   />
                 </div>
               </div>
-              <div className="col-span-4 md:col-span-3 lg:col-span-5 p-6 md:p-8">
+              <div className="col-span-4 md:col-span-3 lg:col-span-5 p-6 md:p-8 bg-white/90">
                 <div className="mb-2 flex items-center">
                   <span className="text-sm font-medium text-primary-500 mr-2">
                     {currentCaseStudy.client}
@@ -116,7 +136,7 @@ const Portfolio = () => {
                     {currentCaseStudy.category}
                   </span>
                 </div>
-                <h3 className="mb-4">{currentCaseStudy.title}</h3>
+                <h3 className="mb-4 font-light tracking-tight">{currentCaseStudy.title}</h3>
                 <p className="text-gray-600 mb-6">
                   {currentCaseStudy.description}
                 </p>
@@ -133,7 +153,7 @@ const Portfolio = () => {
                   ))}
                 </div>
 
-                <Button className="btn-material-contained">
+                <Button className="btn-material-contained rounded-full">
                   View Full Case Study
                 </Button>
               </div>
