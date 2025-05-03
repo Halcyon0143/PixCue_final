@@ -3,78 +3,84 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+// Define form schema with Zod
+const formSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  subject: z.string().optional(),
+  message: z.string().min(10, { message: "Message must be at least 10 characters" }),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const Contact = () => {
   const { toast } = useToast();
-  
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Initialize react-hook-form with zod validation
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
   });
 
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  const validate = () => {
-    const newErrors: {[key: string]: string} = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
-    }
-    if (!formData.message.trim()) newErrors.message = "Message is required";
-    return newErrors;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors = validate();
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
+  const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     
     try {
-      // Here you would typically make an API call to your serverless function
-      // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast({
-        title: "Message Sent!",
-        description: "Thank you for your message. I'll get back to you soon.",
-        duration: 5000,
+      // Submit to Email.js service
+      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          service_id: "YOUR_SERVICE_ID", // You'll need to replace this with actual ID
+          template_id: "YOUR_TEMPLATE_ID", // You'll need to replace this with actual ID
+          user_id: "YOUR_PUBLIC_KEY", // You'll need to replace this with actual public key
+          template_params: {
+            from_name: data.name,
+            from_email: data.email,
+            subject: data.subject || "PixCue Contact Form Submission",
+            message: data.message,
+            to_email: "your-email@gmail.com", // Replace with your Gmail address
+          },
+        }),
       });
       
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
-      
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 5000);
+      if (response.ok) {
+        toast({
+          title: "Message Sent!",
+          description: "Thank you for your message. We'll get back to you soon.",
+          duration: 5000,
+        });
+        
+        // Reset form
+        form.reset();
+      } else {
+        throw new Error("Failed to send message");
+      }
     } catch (error) {
+      console.error("Contact form error:", error);
       toast({
         title: "Error",
         description: "Something went wrong. Please try again later.",
@@ -93,7 +99,7 @@ const Contact = () => {
           <h6 className="text-primary-400 font-medium mb-2">GET IN TOUCH</h6>
           <h2 className="text-gradient">Let's Work Together</h2>
           <p className="text-gray-400 mt-4">
-            Have a project in mind or want to discuss potential opportunities? Fill out the form below and I'll get back to you as soon as possible.
+            Have a project in mind or want to discuss potential social media management opportunities? Fill out the form below and we'll get back to you as soon as possible.
           </p>
         </div>
 
@@ -111,8 +117,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h6 className="font-medium mb-1">Email</h6>
-                    <p className="text-gray-400">hello@janedoe.com</p>
-                    <p className="text-gray-400">contact@janedoe.com</p>
+                    <p className="text-gray-400">hello@pixcue.com</p>
+                    <p className="text-gray-400">contact@pixcue.com</p>
                   </div>
                 </div>
                 
@@ -137,14 +143,14 @@ const Contact = () => {
                   <div>
                     <h6 className="font-medium mb-1">Location</h6>
                     <p className="text-gray-400">San Francisco, CA</p>
-                    <p className="text-gray-400">Available for remote work</p>
+                    <p className="text-gray-400">Available for clients worldwide</p>
                   </div>
                 </div>
               </div>
               
               <div className="mt-10">
                 <h6 className="font-medium mb-3">Availability</h6>
-                <p className="text-gray-400">Currently accepting new projects starting from June 2024</p>
+                <p className="text-gray-400">Currently accepting new clients for social media management</p>
               </div>
             </div>
           </div>
@@ -153,97 +159,102 @@ const Contact = () => {
             <div className="glass p-6 md:p-8 rounded elevation-2">
               <h4 className="text-gradient mb-6">Send Me a Message</h4>
               
-              <form onSubmit={handleSubmit}>
-                <div className="material-grid">
-                  <div className="col-span-4 lg:col-span-6">
-                    <div className="mb-6">
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
-                        Full Name*
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="material-grid">
+                    <div className="col-span-4 lg:col-span-6">
+                      <FormField
+                        control={form.control}
                         name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={`material-input ${errors.name ? 'border-red-500' : 'border-gray-600'}`}
-                        placeholder="John Doe"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Full Name*</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="John Doe" 
+                                className="material-input border-gray-600" 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-500 text-xs mt-1" />
+                          </FormItem>
+                        )}
                       />
-                      {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                     </div>
-                  </div>
-                  
-                  <div className="col-span-4 lg:col-span-6">
-                    <div className="mb-6">
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
-                        Email Address*
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
+                    
+                    <div className="col-span-4 lg:col-span-6">
+                      <FormField
+                        control={form.control}
                         name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={`material-input ${errors.email ? 'border-red-500' : 'border-gray-600'}`}
-                        placeholder="john@example.com"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Email Address*</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="john@example.com" 
+                                className="material-input border-gray-600" 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-500 text-xs mt-1" />
+                          </FormItem>
+                        )}
                       />
-                      {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                     </div>
-                  </div>
-                  
-                  <div className="col-span-8 lg:col-span-12">
-                    <div className="mb-6">
-                      <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1">
-                        Subject
-                      </label>
-                      <input
-                        type="text"
-                        id="subject"
+                    
+                    <div className="col-span-8 lg:col-span-12">
+                      <FormField
+                        control={form.control}
                         name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        className="material-input border-gray-600"
-                        placeholder="Project Inquiry"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Subject</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="Social Media Management Inquiry" 
+                                className="material-input border-gray-600" 
+                                {...field} 
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    
+                    <div className="col-span-8 lg:col-span-12">
+                      <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Message*</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="Tell us about your project or social media needs..." 
+                                className="material-input resize-none border-gray-600" 
+                                rows={5} 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-500 text-xs mt-1" />
+                          </FormItem>
+                        )}
                       />
                     </div>
                   </div>
                   
-                  <div className="col-span-8 lg:col-span-12">
-                    <div className="mb-6">
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">
-                        Message*
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        rows={5}
-                        className={`material-input resize-none ${errors.message ? 'border-red-500' : 'border-gray-600'}`}
-                        placeholder="Tell me about your project or job opportunity..."
-                      ></textarea>
-                      {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
-                    </div>
+                  <div className="mt-8">
+                    <Button 
+                      type="submit" 
+                      className="btn-material-contained flex items-center gap-2"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                      <Send size={18} />
+                    </Button>
                   </div>
-                </div>
-                
-                <div className="mt-8 flex items-center">
-                  <Button 
-                    type="submit" 
-                    className="btn-material-contained flex items-center gap-2"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                    <Send size={18} />
-                  </Button>
-                  
-                  {success && (
-                    <span className="ml-4 text-green-400 animate-fade-in">
-                      Message sent successfully!
-                    </span>
-                  )}
-                </div>
-              </form>
+                </form>
+              </Form>
             </div>
           </div>
         </div>
