@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,10 +18,12 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "#hero" },
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#portfolio" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/#about" },
+    { name: "Services", href: "/#services" },
+    { name: "Portfolio", href: "/#portfolio" },
+    { name: "Blog", href: "/blog" },
+    { name: "Contact", href: "/#contact" },
   ];
 
   return (
@@ -33,21 +36,31 @@ const Navbar = () => {
     >
       <div className="material-container flex items-center justify-between">
         <div className="flex items-center">
-          <a href="#" className="text-xl md:text-2xl font-bold text-gradient">
+          <Link to="/" className="text-xl md:text-2xl font-bold text-gradient">
             Jane Doe
-          </a>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-1">
           {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors ripple-effect rounded-full"
-            >
-              {link.name}
-            </a>
+            link.href.startsWith("/#") ? (
+              <a
+                key={link.name}
+                href={link.href.substring(1)}
+                className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors ripple-effect rounded-full"
+              >
+                {link.name}
+              </a>
+            ) : (
+              <Link
+                key={link.name}
+                to={link.href}
+                className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors ripple-effect rounded-full"
+              >
+                {link.name}
+              </Link>
+            )
           ))}
           <Button className="ml-4 btn-material-contained rounded-full">
             Resume
@@ -70,14 +83,25 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-4 space-y-1 bg-[#1E1E1E]/90 backdrop-blur-md shadow-lg">
             {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-primary-400 hover:bg-white/5 ripple-effect rounded-full"
-              >
-                {link.name}
-              </a>
+              link.href.startsWith("/#") ? (
+                <a
+                  key={link.name}
+                  href={link.href.substring(1)}
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-primary-400 hover:bg-white/5 ripple-effect rounded-full"
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-primary-400 hover:bg-white/5 ripple-effect rounded-full"
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
             <div className="px-3 py-3">
               <Button 
