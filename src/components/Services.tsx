@@ -27,18 +27,18 @@ const ServiceCard = ({
   
   return (
     <div 
-      className="material-card p-6 flex flex-col h-full hover:translate-y-[-4px] transition-all rounded-xl backdrop-blur-sm bg-white/90"
+      className="material-card p-6 flex flex-col h-full hover:translate-y-[-4px] transition-all rounded-xl backdrop-blur-sm bg-[#1E1E1E]/90 border border-white/10"
       style={{ 
         transform: `translateY(${Math.max(0, scrollY * 0.02 - (index * 20))}px)`,
         transition: "transform 0.1s ease-out",
         opacity: Math.min(1, (scrollY - 100 * index) / 400),
       }}
     >
-      <div className="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center text-primary-500 mb-5">
+      <div className="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 mb-5">
         <Icon size={24} />
       </div>
-      <h5 className="font-medium mb-3">{title}</h5>
-      <p className="text-gray-600 text-sm flex-grow mb-4">{description}</p>
+      <h5 className="font-medium mb-3 text-white">{title}</h5>
+      <p className="text-gray-400 text-sm flex-grow mb-4">{description}</p>
       <Button variant="outline" className="btn-material-text self-start p-0 flex items-center gap-2 group">
         Learn More
         <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -87,7 +87,7 @@ const Services = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h6 className="text-primary-500 font-medium mb-2">OUR SERVICES</h6>
           <h2 className="font-light tracking-tight">What We Do <span className="font-medium">Best</span></h2>
-          <p className="text-gray-600 mt-4">
+          <p className="text-gray-400 mt-4">
             We offer a comprehensive range of services designed to elevate your brand's social media presence and drive meaningful engagement.
           </p>
         </div>
