@@ -41,26 +41,26 @@ const Hero = () => {
         <div className="material-grid">
           <div className="col-span-4 md:col-span-8 lg:col-span-8">
             <div className="animate-fade-in">
-              <h6 className="text-primary-400 font-medium mb-2">PORTFOLIO</h6>
+              <h6 className="text-primary-400 font-medium mb-2">SOCIAL MEDIA MANAGEMENT</h6>
               <h1 className="mb-6 font-light tracking-tight">
-                Hi, I'm <span className="text-gradient font-medium">Jane Doe</span>
+                Welcome to <span className="text-gradient font-medium">PixCue</span>
               </h1>
               <h2 className="text-2xl md:text-3xl mb-6 text-gray-300">
-                UX Designer & Full Stack Developer
+                Transform Your Social Media Presence
               </h2>
               
               <p className="text-lg md:text-xl text-gray-400 mb-8 max-w-xl font-light">
-                I create beautiful, functional, and accessible digital experiences that solve real-world problems.
+                We create engaging, data-driven social media strategies that connect your brand with your audience and drive measurable results.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="btn-material-contained group rounded-full shadow-lg hover:shadow-xl transition-all" onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}>
-                  <span className="mr-2">View My Work</span>
+                <Button className="btn-material-contained group rounded-full shadow-lg hover:shadow-xl transition-all" onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <span className="mr-2">Our Services</span>
                   <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} />
                 </Button>
                 
                 <Button variant="outline" className="btn-material-outlined rounded-full" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-                  Contact Me
+                  Get a Quote
                 </Button>
               </div>
             </div>
@@ -79,9 +79,9 @@ const Hero = () => {
                 <div className="h-64 w-64 rounded-full elevation-3 bg-[#1E1E1E] p-4 flex items-center justify-center backdrop-blur-lg">
                   <div className="text-center">
                     <h3 className="text-3xl font-bold text-gradient">
-                      5+ Years
+                      98%
                     </h3>
-                    <p className="text-gray-300">Professional Experience</p>
+                    <p className="text-gray-300">Client Satisfaction Rate</p>
                   </div>
                 </div>
               </div>
@@ -89,7 +89,7 @@ const Hero = () => {
           </div>
         </div>
         
-        {/* Skills */}
+        {/* Expertise Areas */}
         <div 
           className="mt-16 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"
           style={{ 
@@ -98,20 +98,20 @@ const Hero = () => {
           }}
         >
           <div className="glass p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
-            <p className="text-lg font-bold text-gradient">Frontend</p>
-            <p className="text-sm text-gray-400">React, NextJS, Tailwind</p>
+            <p className="text-lg font-bold text-gradient">Strategy</p>
+            <p className="text-sm text-gray-400">Content Planning & Analytics</p>
           </div>
           <div className="glass p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
-            <p className="text-lg font-bold text-gradient">Backend</p>
-            <p className="text-sm text-gray-400">Node.js, Express, MongoDB</p>
+            <p className="text-lg font-bold text-gradient">Creation</p>
+            <p className="text-sm text-gray-400">Graphics, Videos & Copywriting</p>
           </div>
           <div className="glass p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
-            <p className="text-lg font-bold text-gradient">Design</p>
-            <p className="text-sm text-gray-400">Figma, Adobe XD, Sketch</p>
+            <p className="text-lg font-bold text-gradient">Engagement</p>
+            <p className="text-sm text-gray-400">Community Building & Growth</p>
           </div>
           <div className="glass p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
-            <p className="text-lg font-bold text-gradient">DevOps</p>
-            <p className="text-sm text-gray-400">CI/CD, AWS, Vercel</p>
+            <p className="text-lg font-bold text-gradient">Advertising</p>
+            <p className="text-sm text-gray-400">Paid Campaigns & ROI Tracking</p>
           </div>
         </div>
       </div>

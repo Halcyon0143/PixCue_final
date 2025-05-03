@@ -37,7 +37,7 @@ const Navbar = () => {
       <div className="material-container flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="text-xl md:text-2xl font-bold text-gradient">
-            Jane Doe
+            PixCue
           </Link>
         </div>
 
@@ -63,7 +63,7 @@ const Navbar = () => {
             )
           ))}
           <Button className="ml-4 btn-material-contained rounded-full">
-            Resume
+            Get Started
           </Button>
         </nav>
 
@@ -108,7 +108,7 @@ const Navbar = () => {
                 className="w-full btn-material-contained rounded-full"
                 onClick={() => setIsOpen(false)}
               >
-                Resume
+                Get Started
               </Button>
             </div>
           </div>
