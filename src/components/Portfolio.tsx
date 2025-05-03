@@ -1,7 +1,15 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface CaseStudy {
   id: number;
@@ -9,13 +17,20 @@ interface CaseStudy {
   client: string;
   category: string;
   image: string;
+  summary: string;
   description: string;
+  role: string;
+  technologies: string[];
+  challenges: string[];
+  solutions: string[];
   outcomes: string[];
 }
 
 const Portfolio = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollY, setScrollY] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudy | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,33 +44,90 @@ const Portfolio = () => {
   const caseStudies: CaseStudy[] = [
     {
       id: 1,
-      title: "Engaged Audience Growth Strategy",
-      client: "FitActive",
-      category: "Fitness Brand",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&q=80",
-      description:
-        "We helped FitActive increase their social media engagement by implementing a content strategy focused on authentic user stories and interactive challenges.",
-      outcomes: ["45% Engagement Increase", "2.5M Reach", "15K New Followers", "28% Conversion Rate"],
+      title: "E-commerce Platform Redesign",
+      client: "FashionCo",
+      category: "UX/UI Design & Development",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&q=80",
+      summary: "Complete redesign and development of a fashion e-commerce platform focusing on mobile optimization and conversion rate optimization.",
+      description: "FashionCo wanted to revamp their outdated e-commerce platform to improve user experience and boost sales. The goal was to create a modern, mobile-first shopping experience that would appeal to their target demographic while improving key performance metrics.",
+      role: "Lead Designer & Frontend Developer",
+      technologies: ["React", "Next.js", "Tailwind CSS", "Stripe", "Contentful"],
+      challenges: [
+        "3.5 second load time on mobile devices",
+        "15% cart abandonment rate",
+        "Poor mobile navigation experience",
+        "Complex product filtering system"
+      ],
+      solutions: [
+        "Implemented code splitting and image optimization",
+        "Redesigned checkout flow to reduce steps",
+        "Created intuitive mobile navigation pattern",
+        "Built faceted search with instant filtering"
+      ],
+      outcomes: [
+        "45% Faster Load Time",
+        "22% Conversion Rate Increase",
+        "37% Mobile Usage Growth",
+        "53% Reduction in Support Tickets"
+      ],
     },
     {
       id: 2,
-      title: "Brand Awareness Campaign",
-      client: "Urban Eats",
-      category: "Restaurant Chain",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&q=80",
-      description:
-        "Urban Eats wanted to establish a stronger presence in new markets. We created a campaign that highlighted their unique dining experience and community involvement.",
-      outcomes: ["3.8M Views", "62% Brand Recall", "18% Foot Traffic Increase", "250K App Downloads"],
+      title: "Financial Dashboard Application",
+      client: "InvestSmart",
+      category: "Data Visualization & Web App",
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&q=80",
+      summary: "A comprehensive dashboard for financial analysts with real-time data visualization, alerts, and reporting capabilities.",
+      description: "InvestSmart needed a robust financial dashboard to help their clients monitor investments, track performance, and make data-driven decisions. The solution needed to handle complex data visualization while maintaining a clear, intuitive interface.",
+      role: "Full Stack Developer & UX Designer",
+      technologies: ["React", "TypeScript", "D3.js", "Node.js", "MongoDB"],
+      challenges: [
+        "Rendering performance with large datasets",
+        "Complex data relationships visualization",
+        "Real-time updates without performance impact",
+        "Accessible interface for financial data"
+      ],
+      solutions: [
+        "Implemented data virtualization and chunking",
+        "Created custom D3.js visualizations",
+        "Built WebSocket system for efficient updates",
+        "Designed with WCAG AA compliance in mind"
+      ],
+      outcomes: [
+        "87% User Satisfaction Rating",
+        "2M+ Data Points Processed Daily",
+        "35% Increase in Client Retention",
+        "68% Reduction in Analysis Time"
+      ],
     },
     {
       id: 3,
-      title: "Product Launch Campaign",
-      client: "TechVision",
-      category: "Tech Startup",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&q=80",
-      description:
-        "We helped TechVision launch their innovative AR glasses with a social media campaign that generated buzz and positioned them as industry pioneers.",
-      outcomes: ["1.2M Pre-orders", "86% Positive Sentiment", "38 Media Mentions", "5.5M Campaign Reach"],
+      title: "Healthcare Patient Portal",
+      client: "MedConnect",
+      category: "Web Application",
+      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&q=80",
+      summary: "A secure, accessible patient portal allowing users to schedule appointments, access medical records, and communicate with healthcare providers.",
+      description: "MedConnect needed to modernize patient engagement by providing a digital portal that would streamline healthcare management while meeting strict security and accessibility requirements.",
+      role: "Technical Lead & Accessibility Specialist",
+      technologies: ["React", "Express.js", "PostgreSQL", "JWT", "FHIR API"],
+      challenges: [
+        "HIPAA compliance requirements",
+        "Integration with legacy systems",
+        "Accessibility for diverse user groups",
+        "Complex appointment scheduling logic"
+      ],
+      solutions: [
+        "Implemented end-to-end encryption",
+        "Built custom API adapters for legacy systems",
+        "Achieved WCAG 2.1 AAA compliance",
+        "Created intelligent scheduling algorithm"
+      ],
+      outcomes: [
+        "42% Reduction in Scheduling Calls",
+        "98.7% System Uptime",
+        "4.8/5 Patient Satisfaction Score",
+        "65% Increase in Portal Usage"
+      ],
     },
   ];
 
@@ -69,113 +141,148 @@ const Portfolio = () => {
     );
   };
 
-  const currentCaseStudy = caseStudies[activeIndex];
+  const openCaseStudy = (caseStudy: CaseStudy) => {
+    setSelectedCaseStudy(caseStudy);
+    setIsModalOpen(true);
+  };
 
   return (
-    <section id="portfolio" className="py-24 bg-gray-50">
+    <section id="portfolio" className="py-24 bg-[#121212]">
       <div className="material-container">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h6 className="text-primary-500 font-medium mb-2">OUR PORTFOLIO</h6>
-          <h2 className="font-light tracking-tight">Case <span className="font-medium">Studies</span></h2>
-          <p className="text-gray-600 mt-4">
-            Explore how we've helped brands transform their social media presence and achieve exceptional results.
+          <h6 className="text-primary-400 font-medium mb-2">MY WORK</h6>
+          <h2 className="font-light tracking-tight">Case <span className="text-gradient font-medium">Studies</span></h2>
+          <p className="text-gray-400 mt-4">
+            Explore my recent projects and discover how I approach design and development challenges.
           </p>
         </div>
 
-        <div className="relative">
-          {/* Navigation Buttons */}
-          <div className="absolute top-1/2 -left-4 md:-left-12 -translate-y-1/2 z-10">
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full bg-white/80 backdrop-blur-sm elevation-1 hover:elevation-2 text-gray-700 hover:text-primary-500 transition-all"
-              onClick={prevSlide}
+        {/* Case Studies Grid */}
+        <div className="material-grid">
+          {caseStudies.map((study, index) => (
+            <div 
+              key={study.id} 
+              className="col-span-4 mb-8"
+              style={{ 
+                transform: `translateY(${Math.max(0, (scrollY - 1000) * 0.03 - (index * 20))}px)`,
+                transition: "transform 0.2s ease-out",
+                opacity: Math.min(1, (scrollY - 100 * index) / 600),
+              }}
             >
-              <ChevronLeft size={24} />
-            </Button>
-          </div>
-          <div className="absolute top-1/2 -right-4 md:-right-12 -translate-y-1/2 z-10">
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full bg-white/80 backdrop-blur-sm elevation-1 hover:elevation-2 text-gray-700 hover:text-primary-500 transition-all"
-              onClick={nextSlide}
-            >
-              <ChevronRight size={24} />
-            </Button>
-          </div>
-
-          {/* Case Study Card */}
-          <div 
-            className="material-card overflow-hidden rounded-xl backdrop-blur-sm"
-            style={{ 
-              transform: `translateY(${Math.max(0, (scrollY - 1400) * 0.05)}px)`,
-              transition: "transform 0.1s ease-out"
-            }}
-          >
-            <div className="material-grid">
-              <div className="col-span-4 md:col-span-5 lg:col-span-7">
-                <div className="h-full overflow-hidden">
+              <Card className="h-full flex flex-col hover:translate-y-[-4px] transition-all">
+                <div className="h-48 overflow-hidden">
                   <img
-                    src={currentCaseStudy.image}
-                    alt={currentCaseStudy.title}
-                    className="w-full h-full object-cover min-h-[300px] transition-transform hover:scale-105 duration-700"
-                    style={{ 
-                      transform: `scale(1.05) translateY(${Math.max(0, (scrollY - 1500) * -0.03)}px)`,
-                      transition: "transform 0.3s ease-out"
-                    }}
+                    src={study.image}
+                    alt={study.title}
+                    className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
                   />
                 </div>
-              </div>
-              <div className="col-span-4 md:col-span-3 lg:col-span-5 p-6 md:p-8 bg-white/90">
-                <div className="mb-2 flex items-center">
-                  <span className="text-sm font-medium text-primary-500 mr-2">
-                    {currentCaseStudy.client}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {currentCaseStudy.category}
-                  </span>
-                </div>
-                <h3 className="mb-4 font-light tracking-tight">{currentCaseStudy.title}</h3>
-                <p className="text-gray-600 mb-6">
-                  {currentCaseStudy.description}
-                </p>
-
-                <h6 className="text-sm font-medium mb-3">Key Outcomes:</h6>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {currentCaseStudy.outcomes.map((outcome, index) => (
-                    <span
-                      key={index}
-                      className="text-xs py-1 px-3 rounded-full bg-primary-50 text-primary-600"
-                    >
-                      {outcome}
-                    </span>
-                  ))}
-                </div>
-
-                <Button className="btn-material-contained rounded-full">
-                  View Full Case Study
-                </Button>
-              </div>
+                <CardHeader>
+                  <div className="flex items-center text-sm text-gray-400 mb-2">
+                    <span>{study.client}</span>
+                    <span className="mx-2">•</span>
+                    <span>{study.category}</span>
+                  </div>
+                  <CardTitle className="text-xl">{study.title}</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    {study.summary}
+                  </CardDescription>
+                </CardHeader>
+                <CardFooter className="mt-auto">
+                  <Button 
+                    onClick={() => openCaseStudy(study)} 
+                    className="btn-material-text group flex items-center gap-2 p-0"
+                  >
+                    View Full Case Study
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </CardFooter>
+              </Card>
             </div>
-          </div>
-
-          {/* Carousel Indicators */}
-          <div className="flex justify-center mt-6 space-x-2">
-            {caseStudies.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === activeIndex
-                    ? "bg-primary-500"
-                    : "bg-gray-300 hover:bg-gray-400"
-                }`}
-              />
-            ))}
-          </div>
+          ))}
         </div>
       </div>
+
+      {/* Case Study Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        {selectedCaseStudy && (
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[#1E1E1E] text-white">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">{selectedCaseStudy.title}</DialogTitle>
+              <DialogDescription className="text-gray-400">
+                {selectedCaseStudy.client} • {selectedCaseStudy.category}
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-6">
+              {/* Case Study Image */}
+              <div className="rounded-md overflow-hidden h-64 md:h-80">
+                <img
+                  src={selectedCaseStudy.image}
+                  alt={selectedCaseStudy.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Project Description */}
+              <div>
+                <h3 className="text-xl font-medium mb-2">Project Overview</h3>
+                <p className="text-gray-300">{selectedCaseStudy.description}</p>
+              </div>
+              
+              {/* Role & Technologies */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-xl font-medium mb-2">My Role</h3>
+                  <p className="text-gray-300">{selectedCaseStudy.role}</p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium mb-2">Technologies</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedCaseStudy.technologies.map((tech, index) => (
+                      <span key={index} className="bg-primary-500/20 text-primary-300 px-3 py-1 rounded-full text-sm">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Challenges & Solutions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-xl font-medium mb-2">Challenges</h3>
+                  <ul className="list-disc pl-5 text-gray-300 space-y-2">
+                    {selectedCaseStudy.challenges.map((challenge, index) => (
+                      <li key={index}>{challenge}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium mb-2">Solutions</h3>
+                  <ul className="list-disc pl-5 text-gray-300 space-y-2">
+                    {selectedCaseStudy.solutions.map((solution, index) => (
+                      <li key={index}>{solution}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              
+              {/* Outcomes */}
+              <div>
+                <h3 className="text-xl font-medium mb-2">Key Outcomes</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {selectedCaseStudy.outcomes.map((outcome, index) => (
+                    <div key={index} className="glass p-3 rounded-lg text-center">
+                      <p className="text-primary-300 font-medium">{outcome}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        )}
+      </Dialog>
     </section>
   );
 };

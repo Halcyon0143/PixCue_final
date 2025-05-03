@@ -28,16 +28,16 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          50: "#E8EAF6",
-          100: "#C5CAE9",
-          200: "#9FA8DA",
-          300: "#7986CB",
-          400: "#5C6BC0",
-          500: "#3F51B5", // Main primary color
-          600: "#3949AB",
-          700: "#303F9F",
-          800: "#283593",
-          900: "#1A237E",
+          50: "#F3EAFF",
+          100: "#E4D1FF",
+          200: "#C9A3FF",
+          300: "#AD75FF",
+          400: "#9247FF",
+          500: "#8431F3", // Main primary color - Purple
+          600: "#6D27CC",
+          700: "#561DA6",
+          800: "#40147F",
+          900: "#290A59",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -47,7 +47,7 @@ export default {
           200: "#80DEEA",
           300: "#4DD0E1",
           400: "#26C6DA",
-          500: "#00BCD4", // Main secondary color
+          500: "#00BCD4", // Main secondary color - Teal
           600: "#00ACC1",
           700: "#0097A7",
           800: "#00838F",
@@ -72,16 +72,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
         },
       },
       borderRadius: {

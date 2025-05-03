@@ -19,18 +19,18 @@ const Hero = () => {
   return (
     <section id="hero" className="relative min-h-screen flex items-center pt-16 overflow-hidden">
       {/* Background with gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-primary-500/5 to-secondary-500/10 z-0"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-secondary-500/5 z-0"></div>
       
       {/* Parallax abstract shapes */}
       <div 
-        className="absolute top-20 right-10 w-64 h-64 rounded-full bg-primary-200/20 blur-3xl"
+        className="absolute top-20 right-10 w-64 h-64 rounded-full bg-primary-500/10 blur-3xl"
         style={{ 
           transform: `translateY(${scrollY * 0.1}px)`,
           transition: "transform 0.1s ease-out"
         }}
       ></div>
       <div 
-        className="absolute bottom-20 left-10 w-80 h-80 rounded-full bg-secondary-200/20 blur-3xl"
+        className="absolute bottom-20 left-10 w-80 h-80 rounded-full bg-secondary-500/10 blur-3xl"
         style={{ 
           transform: `translateY(${scrollY * -0.05}px)`,
           transition: "transform 0.1s ease-out"
@@ -39,30 +39,34 @@ const Hero = () => {
       
       <div className="material-container relative z-10">
         <div className="material-grid">
-          <div className="col-span-4 md:col-span-6 lg:col-span-7">
+          <div className="col-span-4 md:col-span-8 lg:col-span-8">
             <div className="animate-fade-in">
+              <h6 className="text-primary-400 font-medium mb-2">PORTFOLIO</h6>
               <h1 className="mb-6 font-light tracking-tight">
-                <span className="text-primary-500 font-medium">Elevate</span> Your Social Media Presence
+                Hi, I'm <span className="text-gradient font-medium">Jane Doe</span>
               </h1>
+              <h2 className="text-2xl md:text-3xl mb-6 text-gray-300">
+                UX Designer & Full Stack Developer
+              </h2>
               
-              <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-xl font-light">
-                PixCue helps brands create authentic connections through strategic social media management and premium content creation.
+              <p className="text-lg md:text-xl text-gray-400 mb-8 max-w-xl font-light">
+                I create beautiful, functional, and accessible digital experiences that solve real-world problems.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="btn-material-contained group rounded-full shadow-lg hover:shadow-xl transition-all">
-                  <span className="mr-2">Get Started</span>
+                <Button className="btn-material-contained group rounded-full shadow-lg hover:shadow-xl transition-all" onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <span className="mr-2">View My Work</span>
                   <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} />
                 </Button>
                 
-                <Button variant="outline" className="btn-material-outlined rounded-full">
-                  Our Services
+                <Button variant="outline" className="btn-material-outlined rounded-full" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
+                  Contact Me
                 </Button>
               </div>
             </div>
           </div>
           
-          <div className="col-span-4 md:col-span-6 lg:col-span-5 hidden md:flex items-center justify-center">
+          <div className="col-span-4 md:col-span-8 lg:col-span-4 hidden lg:flex items-center justify-center">
             <div 
               className="relative h-80 w-80 animate-scale-in"
               style={{ 
@@ -72,12 +76,12 @@ const Hero = () => {
             >
               <div className="absolute inset-0 rounded-full bg-primary-500/10 animate-pulse" style={{ animationDuration: '3s' }}></div>
               <div className="relative h-full w-full flex items-center justify-center">
-                <div className="h-64 w-64 rounded-full elevation-3 bg-white p-4 flex items-center justify-center backdrop-blur-lg">
+                <div className="h-64 w-64 rounded-full elevation-3 bg-[#1E1E1E] p-4 flex items-center justify-center backdrop-blur-lg">
                   <div className="text-center">
-                    <h3 className="text-3xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
-                      45%
+                    <h3 className="text-3xl font-bold text-gradient">
+                      5+ Years
                     </h3>
-                    <p className="text-gray-700">Average Engagement Increase</p>
+                    <p className="text-gray-300">Professional Experience</p>
                   </div>
                 </div>
               </div>
@@ -85,7 +89,7 @@ const Hero = () => {
           </div>
         </div>
         
-        {/* Stats */}
+        {/* Skills */}
         <div 
           className="mt-16 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"
           style={{ 
@@ -93,21 +97,21 @@ const Hero = () => {
             transition: "transform 0.1s ease-out"
           }}
         >
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
-            <p className="text-2xl font-bold text-primary-500">200+</p>
-            <p className="text-sm text-gray-600">Brands Managed</p>
+          <div className="glass p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
+            <p className="text-lg font-bold text-gradient">Frontend</p>
+            <p className="text-sm text-gray-400">React, NextJS, Tailwind</p>
           </div>
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
-            <p className="text-2xl font-bold text-primary-500">45%</p>
-            <p className="text-sm text-gray-600">Engagement Growth</p>
+          <div className="glass p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
+            <p className="text-lg font-bold text-gradient">Backend</p>
+            <p className="text-sm text-gray-400">Node.js, Express, MongoDB</p>
           </div>
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
-            <p className="text-2xl font-bold text-primary-500">10M+</p>
-            <p className="text-sm text-gray-600">Audience Reach</p>
+          <div className="glass p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
+            <p className="text-lg font-bold text-gradient">Design</p>
+            <p className="text-sm text-gray-400">Figma, Adobe XD, Sketch</p>
           </div>
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
-            <p className="text-2xl font-bold text-primary-500">24/7</p>
-            <p className="text-sm text-gray-600">Support Team</p>
+          <div className="glass p-4 rounded-xl elevation-1 hover:elevation-2 transition-all">
+            <p className="text-lg font-bold text-gradient">DevOps</p>
+            <p className="text-sm text-gray-400">CI/CD, AWS, Vercel</p>
           </div>
         </div>
       </div>

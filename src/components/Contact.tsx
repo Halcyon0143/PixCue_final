@@ -9,24 +9,24 @@ const Contact = () => {
   
   const [formData, setFormData] = useState({
     name: "",
-    company: "",
     email: "",
-    phone: "",
+    subject: "",
     message: "",
   });
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const validate = () => {
     const newErrors: {[key: string]: string} = {};
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.email) {
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
     }
-    if (!formData.message) newErrors.message = "Message is required";
+    if (!formData.message.trim()) newErrors.message = "Message is required";
     return newErrors;
   };
 
@@ -43,7 +43,7 @@ const Contact = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors = validate();
     
@@ -54,103 +54,110 @@ const Contact = () => {
     
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      console.log("Form submitted:", formData);
+    try {
+      // Here you would typically make an API call to your serverless function
+      // For now, we'll simulate a successful submission
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       toast({
         title: "Message Sent!",
-        description: "We'll get back to you as soon as possible.",
+        description: "Thank you for your message. I'll get back to you soon.",
         duration: 5000,
       });
       
       setFormData({
         name: "",
-        company: "",
         email: "",
-        phone: "",
+        subject: "",
         message: "",
       });
       
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 5000);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
-    <section id="contact" className="py-24 bg-gray-50">
+    <section id="contact" className="py-24 bg-[#121212]">
       <div className="material-container">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h6 className="text-primary-500 font-medium mb-2">GET IN TOUCH</h6>
-          <h2>Let's Discuss Your Project</h2>
-          <p className="text-gray-600 mt-4">
-            Ready to elevate your social media presence? Fill out the form below and one of our experts will get back to you shortly.
+          <h6 className="text-primary-400 font-medium mb-2">GET IN TOUCH</h6>
+          <h2 className="text-gradient">Let's Work Together</h2>
+          <p className="text-gray-400 mt-4">
+            Have a project in mind or want to discuss potential opportunities? Fill out the form below and I'll get back to you as soon as possible.
           </p>
         </div>
 
         <div className="material-grid">
           <div className="col-span-4 md:col-span-5 lg:col-span-4">
-            <div className="bg-white p-6 md:p-8 rounded elevation-2 h-full">
-              <h4 className="mb-6">Contact Information</h4>
+            <div className="glass p-6 md:p-8 rounded elevation-2 h-full">
+              <h4 className="text-gradient mb-6">Contact Information</h4>
               
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="mr-4 mt-1">
-                    <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-500">
+                    <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-400">
                       <Mail size={20} />
                     </div>
                   </div>
                   <div>
                     <h6 className="font-medium mb-1">Email</h6>
-                    <p className="text-gray-600">hello@pixcue.agency</p>
-                    <p className="text-gray-600">support@pixcue.agency</p>
+                    <p className="text-gray-400">hello@janedoe.com</p>
+                    <p className="text-gray-400">contact@janedoe.com</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
                   <div className="mr-4 mt-1">
-                    <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-500">
+                    <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-400">
                       <Phone size={20} />
                     </div>
                   </div>
                   <div>
                     <h6 className="font-medium mb-1">Phone</h6>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
-                    <p className="text-gray-600">+1 (555) 765-4321</p>
+                    <p className="text-gray-400">+1 (555) 123-4567</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
                   <div className="mr-4 mt-1">
-                    <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-500">
+                    <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-400">
                       <MapPin size={20} />
                     </div>
                   </div>
                   <div>
-                    <h6 className="font-medium mb-1">Office</h6>
-                    <p className="text-gray-600">123 Social Media Ave</p>
-                    <p className="text-gray-600">San Francisco, CA 94105</p>
+                    <h6 className="font-medium mb-1">Location</h6>
+                    <p className="text-gray-400">San Francisco, CA</p>
+                    <p className="text-gray-400">Available for remote work</p>
                   </div>
                 </div>
               </div>
               
               <div className="mt-10">
-                <h6 className="font-medium mb-3">Working Hours</h6>
-                <p className="text-gray-600">Monday - Friday: 9am - 6pm</p>
-                <p className="text-gray-600">Saturday: 10am - 4pm</p>
-                <p className="text-gray-600">Sunday: Closed</p>
+                <h6 className="font-medium mb-3">Availability</h6>
+                <p className="text-gray-400">Currently accepting new projects starting from June 2024</p>
               </div>
             </div>
           </div>
           
           <div className="col-span-4 md:col-span-3 lg:col-span-8 mt-8 md:mt-0">
-            <div className="bg-white p-6 md:p-8 rounded elevation-2">
-              <h4 className="mb-6">Send Us a Message</h4>
+            <div className="glass p-6 md:p-8 rounded elevation-2">
+              <h4 className="text-gradient mb-6">Send Me a Message</h4>
               
               <form onSubmit={handleSubmit}>
                 <div className="material-grid">
-                  <div className="col-span-4">
+                  <div className="col-span-4 lg:col-span-6">
                     <div className="mb-6">
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
                         Full Name*
                       </label>
                       <input
@@ -159,33 +166,16 @@ const Contact = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className={`material-input ${errors.name ? 'border-red-500' : ''}`}
+                        className={`material-input ${errors.name ? 'border-red-500' : 'border-gray-600'}`}
                         placeholder="John Doe"
                       />
                       {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                     </div>
                   </div>
                   
-                  <div className="col-span-4">
+                  <div className="col-span-4 lg:col-span-6">
                     <div className="mb-6">
-                      <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
-                        Company
-                      </label>
-                      <input
-                        type="text"
-                        id="company"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleChange}
-                        className="material-input"
-                        placeholder="Your Company"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="col-span-4">
-                    <div className="mb-6">
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
                         Email Address*
                       </label>
                       <input
@@ -194,33 +184,33 @@ const Contact = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={`material-input ${errors.email ? 'border-red-500' : ''}`}
+                        className={`material-input ${errors.email ? 'border-red-500' : 'border-gray-600'}`}
                         placeholder="john@example.com"
                       />
                       {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                     </div>
                   </div>
                   
-                  <div className="col-span-4">
+                  <div className="col-span-8 lg:col-span-12">
                     <div className="mb-6">
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                        Phone Number
+                      <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1">
+                        Subject
                       </label>
                       <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
+                        type="text"
+                        id="subject"
+                        name="subject"
+                        value={formData.subject}
                         onChange={handleChange}
-                        className="material-input"
-                        placeholder="+1 (555) 123-4567"
+                        className="material-input border-gray-600"
+                        placeholder="Project Inquiry"
                       />
                     </div>
                   </div>
                   
-                  <div className="col-span-8">
+                  <div className="col-span-8 lg:col-span-12">
                     <div className="mb-6">
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">
                         Message*
                       </label>
                       <textarea
@@ -229,15 +219,15 @@ const Contact = () => {
                         value={formData.message}
                         onChange={handleChange}
                         rows={5}
-                        className={`material-input resize-none ${errors.message ? 'border-red-500' : ''}`}
-                        placeholder="Tell us about your project..."
+                        className={`material-input resize-none ${errors.message ? 'border-red-500' : 'border-gray-600'}`}
+                        placeholder="Tell me about your project or job opportunity..."
                       ></textarea>
                       {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-8">
+                <div className="mt-8 flex items-center">
                   <Button 
                     type="submit" 
                     className="btn-material-contained flex items-center gap-2"
@@ -246,6 +236,12 @@ const Contact = () => {
                     {isSubmitting ? "Sending..." : "Send Message"}
                     <Send size={18} />
                   </Button>
+                  
+                  {success && (
+                    <span className="ml-4 text-green-400 animate-fade-in">
+                      Message sent successfully!
+                    </span>
+                  )}
                 </div>
               </form>
             </div>
