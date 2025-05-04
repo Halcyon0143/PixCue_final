@@ -1,10 +1,25 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChartPie } from "lucide-react";
+
+interface Fact {
+  value: string;
+  label: string;
+}
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
+  const [currentFactIndex, setCurrentFactIndex] = useState(0);
+  
+  // Facts and figures to display
+  const facts: Fact[] = [
+    { value: "98%", label: "Client Satisfaction Rate" },
+    { value: "250+", label: "Projects Completed" },
+    { value: "85%", label: "Increase in Engagement" },
+    { value: "12M+", label: "Social Impressions" },
+    { value: "40%", label: "Average ROI Increase" }
+  ];
 
   // Parallax effect
   useEffect(() => {
@@ -15,6 +30,15 @@ const Hero = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
+  // Rotate through facts
+  useEffect(() => {
+    const factInterval = setInterval(() => {
+      setCurrentFactIndex((prevIndex) => (prevIndex + 1) % facts.length);
+    }, 3000); // Change every 3 seconds
+    
+    return () => clearInterval(factInterval);
+  }, [facts.length]);
   
   return (
     <section id="hero" className="relative min-h-screen flex items-center pt-16 overflow-hidden">
@@ -74,16 +98,44 @@ const Hero = () => {
                 transition: "transform 0.1s ease-out"
               }}
             >
+              {/* Animated Background Elements */}
               <div className="absolute inset-0 rounded-full bg-primary-500/10 animate-pulse" style={{ animationDuration: '3s' }}></div>
+              <div className="absolute h-full w-full rounded-full bg-secondary-500/5 animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }}></div>
+              
+              {/* Main Circle */}
               <div className="relative h-full w-full flex items-center justify-center">
-                <div className="h-64 w-64 rounded-full elevation-3 bg-[#1E1E1E] p-4 flex items-center justify-center backdrop-blur-lg">
-                  <div className="text-center">
-                    <h3 className="text-3xl font-bold text-gradient">
-                      98%
-                    </h3>
-                    <p className="text-gray-300">Client Satisfaction Rate</p>
+                <div className="h-64 w-64 rounded-full elevation-3 bg-[#1E1E1E] p-4 flex items-center justify-center backdrop-blur-lg overflow-hidden">
+                  {/* Icon */}
+                  <ChartPie className="absolute top-6 left-7 text-primary-400/30" size={32} />
+                  
+                  {/* Animated content */}
+                  <div className="text-center relative">
+                    {facts.map((fact, index) => (
+                      <div 
+                        key={index}
+                        className="absolute inset-0 flex flex-col items-center justify-center transition-all duration-700"
+                        style={{ 
+                          opacity: currentFactIndex === index ? 1 : 0,
+                          transform: `translateY(${currentFactIndex === index ? 0 : 20}px)`,
+                          pointerEvents: 'none'
+                        }}
+                      >
+                        <h3 className="text-3xl font-bold text-gradient mb-2">
+                          {fact.value}
+                        </h3>
+                        <p className="text-gray-300">{fact.label}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
+              </div>
+              
+              {/* Orbiting Dots */}
+              <div className="absolute inset-0 rounded-full" style={{ animation: 'spin 20s linear infinite' }}>
+                <div className="absolute top-1/2 -translate-y-1/2 left-0 h-3 w-3 rounded-full bg-primary-400"></div>
+              </div>
+              <div className="absolute inset-0 rounded-full" style={{ animation: 'spin 15s linear infinite reverse' }}>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-secondary-400"></div>
               </div>
             </div>
           </div>
@@ -115,6 +167,14 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      
+      {/* Keyframes for the spinning animation */}
+      <style jsx>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </section>
   );
 };
