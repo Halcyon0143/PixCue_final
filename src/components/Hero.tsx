@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChartPie } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface Fact {
   value: string;
@@ -20,6 +20,13 @@ const Hero = () => {
     { value: "12M+", label: "Social Impressions" },
     { value: "40%", label: "Average ROI Increase" }
   ];
+
+  // Click handler for dots
+  const handleDotClick = (dotIndex: number) => {
+    // Change to a random fact when dots are clicked
+    const randomFactIndex = Math.floor(Math.random() * facts.length);
+    setCurrentFactIndex(randomFactIndex);
+  };
 
   // Parallax effect
   useEffect(() => {
@@ -105,9 +112,6 @@ const Hero = () => {
               {/* Main Circle */}
               <div className="relative h-full w-full flex items-center justify-center">
                 <div className="h-64 w-64 rounded-full elevation-3 bg-[#1E1E1E] p-4 flex items-center justify-center backdrop-blur-lg overflow-hidden">
-                  {/* Icon */}
-                  <ChartPie className="absolute top-6 left-7 text-primary-400/30" size={32} />
-                  
                   {/* Animated content */}
                   <div className="text-center relative">
                     {facts.map((fact, index) => (
@@ -130,12 +134,36 @@ const Hero = () => {
                 </div>
               </div>
               
-              {/* Orbiting Dots */}
+              {/* Interactive Orbiting Dots */}
               <div className="absolute inset-0 rounded-full" style={{ animation: 'spin 20s linear infinite' }}>
-                <div className="absolute top-1/2 -translate-y-1/2 left-0 h-3 w-3 rounded-full bg-primary-400"></div>
+                <div 
+                  onClick={() => handleDotClick(0)}
+                  className="absolute top-1/2 -translate-y-1/2 left-0 h-3 w-3 rounded-full bg-primary-400 hover:scale-150 hover:bg-primary-300 transition-all cursor-pointer"
+                  title="Click me"
+                ></div>
               </div>
               <div className="absolute inset-0 rounded-full" style={{ animation: 'spin 15s linear infinite reverse' }}>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-secondary-400"></div>
+                <div 
+                  onClick={() => handleDotClick(1)}
+                  className="absolute top-0 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-secondary-400 hover:scale-150 hover:bg-secondary-300 transition-all cursor-pointer"
+                  title="Click me"
+                ></div>
+              </div>
+              
+              {/* Additional interactive dots with different orbits */}
+              <div className="absolute inset-0 rounded-full" style={{ animation: 'spin 25s linear infinite' }}>
+                <div 
+                  onClick={() => handleDotClick(2)}
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-primary-300 hover:scale-150 hover:bg-primary-200 transition-all cursor-pointer"
+                  title="Click me"
+                ></div>
+              </div>
+              <div className="absolute inset-0 rounded-full" style={{ animation: 'spin 18s linear infinite reverse' }}>
+                <div 
+                  onClick={() => handleDotClick(3)}
+                  className="absolute top-1/2 -translate-y-1/2 right-0 h-3 w-3 rounded-full bg-secondary-300 hover:scale-150 hover:bg-secondary-200 transition-all cursor-pointer"
+                  title="Click me"
+                ></div>
               </div>
             </div>
           </div>
