@@ -169,12 +169,14 @@ const Hero = () => {
       </div>
       
       {/* Keyframes for the spinning animation */}
-      <style jsx>{`
+      <style>
+        {`
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-      `}</style>
+        `}
+      </style>
     </section>
   );
 };
