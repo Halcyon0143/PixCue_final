@@ -70,7 +70,7 @@ const BlogCard = ({ post }: { post: typeof blogPosts[0] }) => {
         <p className="text-gray-400 text-sm flex-grow mb-4">{post.excerpt}</p>
         
         <Link to={`/blog/${post.id}`} className="self-start">
-          <Button variant="outline" className="btn-material-text p-0 flex items-center gap-2 group">
+          <Button variant="link" className="text-primary-400 hover:text-primary-300 p-0 flex items-center gap-2 group">
             Read More
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Button>
