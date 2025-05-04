@@ -1,7 +1,15 @@
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Quote } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
+import { useTheme } from "next-themes";
 
 interface Testimonial {
   id: number;
@@ -14,6 +22,8 @@ interface Testimonial {
 
 const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [api, setApi] = useState<any>(null);
+  const { theme } = useTheme();
 
   const testimonials: Testimonial[] = [
     {
@@ -45,15 +55,42 @@ const Testimonials = () => {
     },
   ];
 
-  const nextTestimonial = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-  };
+  // Handle auto rotation
+  const nextTestimonial = useCallback(() => {
+    if (!api) return;
+    api.scrollNext();
+  }, [api]);
 
-  const prevTestimonial = () => {
-    setActiveIndex((prevIndex) =>
-      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
-    );
-  };
+  const prevTestimonial = useCallback(() => {
+    if (!api) return;
+    api.scrollPrev();
+  }, [api]);
+
+  // Auto-carousel effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextTestimonial();
+    }, 5000); // Change slide every 5 seconds
+    
+    return () => clearInterval(interval);
+  }, [nextTestimonial]);
+
+  // Update active index when carousel changes
+  useEffect(() => {
+    if (!api) return;
+    
+    const onSelect = () => {
+      setActiveIndex(api.selectedScrollSnap());
+    };
+    
+    api.on("select", onSelect);
+    api.on("reInit", onSelect);
+    
+    return () => {
+      api.off("select", onSelect);
+      api.off("reInit", onSelect);
+    };
+  }, [api]);
 
   return (
     <section id="testimonials" className="py-24">
@@ -67,44 +104,69 @@ const Testimonials = () => {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="material-card p-8 md:p-12 relative">
-            <div className="absolute top-6 left-6 text-primary-200">
-              <Quote size={48} />
-            </div>
-
-            <div className="relative">
-              {testimonials.map((testimonial, idx) => (
-                <div
-                  key={testimonial.id}
-                  className={`transition-opacity duration-500 ${
-                    idx === activeIndex ? "block" : "hidden"
-                  }`}
-                >
-                  <blockquote className="text-lg md:text-xl text-gray-700 mb-8 pl-8">
-                    "{testimonial.quote}"
-                  </blockquote>
-
-                  <div className="flex items-center">
-                    <div className="mr-4">
-                      <img
-                        src={testimonial.image}
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
+          <Carousel 
+            setApi={setApi}
+            opts={{
+              align: "center",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {testimonials.map((testimonial) => (
+                <CarouselItem key={testimonial.id}>
+                  <div className="material-card p-8 md:p-12 relative">
+                    <div className="absolute top-6 left-6 text-primary-200">
+                      <Quote size={48} />
                     </div>
-                    <div>
-                      <p className="font-medium">{testimonial.name}</p>
-                      <p className="text-sm text-gray-600">
-                        {testimonial.position}, {testimonial.company}
-                      </p>
+
+                    <div className="relative">
+                      <blockquote className="text-lg md:text-xl text-gray-700 mb-8 pl-8">
+                        "{testimonial.quote}"
+                      </blockquote>
+
+                      <div className="flex items-center">
+                        <div className="mr-4">
+                          <img
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-medium">{testimonial.name}</p>
+                          <p className="text-sm text-gray-600">
+                            {testimonial.position}, {testimonial.company}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </CarouselItem>
               ))}
+            </CarouselContent>
+            <div className="hidden md:block">
+              <CarouselPrevious className="absolute left-2 top-1/2" onClick={prevTestimonial} />
+              <CarouselNext className="absolute right-2 top-1/2" onClick={nextTestimonial} />
             </div>
+          </Carousel>
+
+          {/* Testimonial Indicators */}
+          <div className="flex justify-center mt-6 space-x-2">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => api?.scrollTo(index)}
+                className={`w-3 h-3 rounded-full transition-colors ${
+                  index === activeIndex
+                    ? "bg-primary-500"
+                    : "bg-gray-300 hover:bg-gray-400"
+                }`}
+              />
+            ))}
           </div>
 
-          <div className="flex justify-center mt-8 space-x-4">
+          <div className="flex justify-center mt-8 md:hidden space-x-4">
             <Button
               variant="outline"
               className="btn-material-outlined"
@@ -118,21 +180,6 @@ const Testimonials = () => {
             >
               Next Testimonial
             </Button>
-          </div>
-
-          {/* Testimonial Indicators */}
-          <div className="flex justify-center mt-6 space-x-2">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === activeIndex
-                    ? "bg-primary-500"
-                    : "bg-gray-300 hover:bg-gray-400"
-                }`}
-              />
-            ))}
           </div>
         </div>
       </div>
