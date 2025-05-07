@@ -54,15 +54,15 @@ const Contact = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          service_id: "YOUR_SERVICE_ID", // You'll need to replace this with actual ID
-          template_id: "YOUR_TEMPLATE_ID", // You'll need to replace this with actual ID
-          user_id: "YOUR_PUBLIC_KEY", // You'll need to replace this with actual public key
+          service_id: "service_6v8lczc", // You'll need to replace this with actual ID
+          template_id: "template_r62ywdy", // You'll need to replace this with actual ID
+          user_id: "t2u3275SGlUQTn6Z1", // You'll need to replace this with actual public key
           template_params: {
             from_name: data.name,
             from_email: data.email,
             subject: data.subject || "PixCue Contact Form Submission",
             message: data.message,
-            to_email: "your-email@gmail.com", // Replace with your Gmail address
+            to_email: "contactpixcue@gmail.com", // Replace with your Gmail address
           },
         }),
       });
@@ -117,8 +117,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h6 className="font-medium mb-1">Email</h6>
-                    <p className="text-gray-400">hello@pixcue.com</p>
-                    <p className="text-gray-400">contact@pixcue.com</p>
+                    <p className="text-gray-400">contactpixcue@gmail.com</p>
+                    <p className="text-gray-400">contactpixcue@gmail.com</p>
                   </div>
                 </div>
                 
@@ -130,7 +130,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h6 className="font-medium mb-1">Phone</h6>
-                    <p className="text-gray-400">+1 (555) 123-4567</p>
+                    <p className="text-gray-400">+91 1234567890</p>
                   </div>
                 </div>
                 
@@ -142,7 +142,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h6 className="font-medium mb-1">Location</h6>
-                    <p className="text-gray-400">San Francisco, CA</p>
+                    <p className="text-gray-400">Delhi,India</p>
                     <p className="text-gray-400">Available for clients worldwide</p>
                   </div>
                 </div>
@@ -171,7 +171,7 @@ const Contact = () => {
                             <FormLabel className="text-gray-300">Full Name*</FormLabel>
                             <FormControl>
                               <Input 
-                                placeholder="John Doe" 
+                                placeholder="Your Name" 
                                 className="material-input border-gray-600" 
                                 {...field} 
                               />
@@ -191,7 +191,7 @@ const Contact = () => {
                             <FormLabel className="text-gray-300">Email Address*</FormLabel>
                             <FormControl>
                               <Input 
-                                placeholder="john@example.com" 
+                                placeholder="" 
                                 className="material-input border-gray-600" 
                                 {...field} 
                               />
